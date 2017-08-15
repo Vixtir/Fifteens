@@ -65,6 +65,69 @@ class Game extends React.Component{
       }                     
   }
 
+  keyDownHandler(event){
+    let squares = this.state.squares.slice();
+    let rowZero = this.state.rowWithZero;
+    let columnZero = this.state.columnWithZero;
+    let [fromX, fromY, toX, toY] = [rowZero, columnZero, rowZero, columnZero];
+
+    if(event.keyCode === 37){
+      if(columnZero === 3){
+        return false;
+      } else {
+        fromY += 1;
+      }
+    } else if(event.keyCode === 38){
+      if(rowZero === 3){
+        return false;
+      } else {
+        fromX +=1
+      }
+    } else if(event.keyCode === 39){
+      if(columnZero === 0){
+        return false;
+      } else {
+        fromY -= 1
+      }
+    } else if(event.keyCode === 40){
+      if(rowZero === 0){
+        return false;
+      } else {
+        fromX -= 1
+      }
+    } else if(event.keyCode === 13) {
+      this.resetGame();
+      return;
+    } else {
+      return false;
+    }
+    
+    this.setState({
+      squares: this.moveSquares(squares, fromX, fromY, toX, toY),
+      rowWithZero: fromX,
+      columnWithZero: fromY,
+      turn: this.state.turn + 1
+    })
+  }
+
+  componentDidMount(){
+    window.addEventListener('keydown', this.keyDownHandler.bind(this))
+  }
+
+  componentWillUnmount(){
+    window.removeEventListener('keydown', this.keyDownHandler.bind(this))
+  }
+
+  moveSquares(arrayOfSquares, fromX, fromY, toX, toY){
+    let squares = arrayOfSquares.slice();
+
+    let tmp = squares[fromX][fromY];
+    squares[toX][toY] = tmp;
+    squares[fromX][fromY] = 0;
+
+    return squares;
+  }
+
   findRowWithZero(arr){
     for(let i = 0; i < arr.length; i++){
       let haveZero = arr[i].some( (el) => el === 0);
@@ -129,13 +192,32 @@ class Game extends React.Component{
   }
 
   render(){
-    // let rowWithZero = this.findRowWithZero(gameArray);
-    // let columnWithZero = gameArray[rowWithZero].indexOf(0);
     if(this.winPositionOfSquares(this.state.squares)){
       alert('YOU WIN');
     }
     return (
       <div className='game'>
+        <div className='modal'>
+          <div className='modalNavigation'>
+            <div className='modalHeader'>
+              Управление
+            </div>
+            <div className='modalBody'>
+              <div className='mouseNavigation'>
+                <i className="material-icons">mouse</i><span> - левый клик мышки передвинет фишку на свободное место</span>
+              </div>
+              <div className='arrowNavigation'>
+                <div className='wrapper'>
+                  <div><i className="material-icons">keyboard_arrow_up</i></div>
+                  <div><i className="material-icons">keyboard_arrow_left</i></div>
+                  <div><i className="material-icons">keyboard_arrow_down</i></div>
+                  <div><i className="material-icons">keyboard_arrow_right</i></div>
+                </div>
+                <span> - cтрелки на клавиатуре так же могут сдвинуть фишки на свободное поле</span>  
+              </div>
+            </div>
+          </div>
+        </div> 
         <div className='header'>
           <div className='title'>
             "Игра в Пятнашки"
