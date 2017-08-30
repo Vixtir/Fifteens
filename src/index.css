@@ -147,7 +147,17 @@
     font-feature-settings: 'liga';
   }
 
-  .modal{
+  .material-icons.info {
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--main-border-color)
+  }
+
+  .modal.closed{
+    display: none;
+  }
+
+  .modal.opened{
     position: fixed;
     z-index: 1;
     left: 0;
@@ -170,10 +180,10 @@
     background: var(--main-bg-color);
   }
 
-  .modalHeader{
-    margin: 10px auto;
+  .modalHeader, 
+  .modalFooter{
     font-size: 24px;
-    width: 120px;
+    margin: 5px 0;
   }
 
   .modalBody .material-icons{
@@ -206,6 +216,12 @@
   .arrowNavigation .wrapper > div:nth-of-type(1){
     margin-left: 33px;
     margin-right: 30px;
+  }
+
+  .closeNavigation {
+    color: var(--second-bg-color);
+    cursor: pointer;
+
   }
 
 @media only screen and (orientation: landscape) and (max-width: 767px){

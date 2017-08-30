@@ -5,6 +5,46 @@ import registerServiceWorker from './registerServiceWorker';
 
 import shuffleArray from './snippets'
 
+class NavigationModal extends React.Component{
+  handleClick(event){
+    const elem = document.querySelector('div.modal');
+
+    if(event.target === elem){
+      this.props.onClick();
+    }
+  }
+
+  render(){
+    return(
+      <div className={`modal ${this.props.className}`} onClick={(event) => this.handleClick(event)}>
+        <div className='modalNavigation'>
+          <div className='modalHeader centerContent'>
+            <span>Управление</span>
+          </div>
+          <div className='modalBody'>
+            <div className='mouseNavigation'>
+              <i className="material-icons">mouse</i><span> - левый клик мышки передвинет фишку на свободное место</span>
+            </div>
+            <div className='arrowNavigation'>
+              <div className='wrapper'>
+                <div><i className="material-icons">keyboard_arrow_up</i></div>
+                <div><i className="material-icons">keyboard_arrow_left</i></div>
+                <div><i className="material-icons">keyboard_arrow_down</i></div>
+                <div><i className="material-icons">keyboard_arrow_right</i></div>
+              </div>
+              <span> - cтрелки на клавиатуре так же могут сдвинуть фишки на свободное поле</span>  
+            </div>
+          </div>
+          <div className='modalFooter centerContent'>
+            <span className='closeNavigation' onClick={() => this.props.onClick()}>Понятно!</span>
+          </div>  
+        </div>
+      </div>
+    )
+  }
+}
+
+
 class Square extends React.Component{
   render(){
     return (
@@ -61,7 +101,8 @@ class Game extends React.Component{
       squares: startArray,
       rowWithZero: this.findRowWithZero(startArray),
       columnWithZero: startArray[this.findRowWithZero(startArray)].indexOf(0),
-      turn: 0
+      turn: 0,
+      openNavigationModal: false
       }                     
   }
 
@@ -177,6 +218,13 @@ class Game extends React.Component{
     }
   }
 
+  handleInfoClick(event){
+    console.dir(this);
+    this.setState({
+      openNavigationModal: !this.state.openNavigationModal,
+    })
+  }
+
   resetGame(){
     const startArray = shuffleArray([[ 1, 2, 3, 4],
                                      [ 5, 6, 7, 8],
@@ -194,33 +242,14 @@ class Game extends React.Component{
   render(){
     if(this.winPositionOfSquares(this.state.squares)){
       alert('YOU WIN');
-    }
+    }  
+
     return (
       <div className='game'>
-        <div className='modal'>
-          <div className='modalNavigation'>
-            <div className='modalHeader'>
-              Управление
-            </div>
-            <div className='modalBody'>
-              <div className='mouseNavigation'>
-                <i className="material-icons">mouse</i><span> - левый клик мышки передвинет фишку на свободное место</span>
-              </div>
-              <div className='arrowNavigation'>
-                <div className='wrapper'>
-                  <div><i className="material-icons">keyboard_arrow_up</i></div>
-                  <div><i className="material-icons">keyboard_arrow_left</i></div>
-                  <div><i className="material-icons">keyboard_arrow_down</i></div>
-                  <div><i className="material-icons">keyboard_arrow_right</i></div>
-                </div>
-                <span> - cтрелки на клавиатуре так же могут сдвинуть фишки на свободное поле</span>  
-              </div>
-            </div>
-          </div>
-        </div> 
+        <NavigationModal className={this.state.openNavigationModal ? 'opened':'closed'} onClick = {this.handleInfoClick.bind(this)}/>
         <div className='header'>
           <div className='title'>
-            "Игра в Пятнашки"
+            "Игра в Пятнашки" <i className="material-icons info" onClick = {(event) => this.handleInfoClick()}>info_outline</i>
           </div>
 
         </div>
