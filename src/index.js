@@ -17,26 +17,52 @@ class NavigationModal extends React.Component{
   render(){
     return(
       <div className={`modal ${this.props.className}`} onClick={(event) => this.handleClick(event)}>
-        <div className='modalNavigation'>
-          <div className='modalHeader centerContent'>
+        <div className='modal-navigation'>
+          <div className='goal'>
+            <div className='modal-header center-content'>
+              <span>Цель игры</span>
+            </div>
+            <div className='text-center'>
+              <span>
+                Передвигая фишки необходимо выстроить их по возрастанию, слева направо, сверху вниз
+              </span>  
+            </div>
+          </div>
+          <div className='modal-header center-content'>
             <span>Управление</span>
           </div>
-          <div className='modalBody'>
-            <div className='mouseNavigation'>
-              <i className="material-icons">mouse</i><span> - левый клик мышки передвинет фишку на свободное место</span>
+          <div className='modal-body'>
+            <div className='tap-navigation'>
+              <div>
+                <i className="material-icons">tap_and_play</i>
+              </div>
+              <div>
+                <span>
+                  Тап на фишке передвинет ее на свободное место
+                </span>  
+              </div>
             </div>
-            <div className='arrowNavigation'>
+            <div className='mouse-navigation'>
+              <div>
+                <i className="material-icons">mouse</i>
+              </div>
+              <span> Левый клик мышки передвинет фишку на свободное место</span>
+            </div>
+            <div className='arrow-navigation'>
+              <div>
               <div className='wrapper'>
                 <div><i className="material-icons">keyboard_arrow_up</i></div>
                 <div><i className="material-icons">keyboard_arrow_left</i></div>
                 <div><i className="material-icons">keyboard_arrow_down</i></div>
                 <div><i className="material-icons">keyboard_arrow_right</i></div>
               </div>
-              <span> - cтрелки на клавиатуре так же могут сдвинуть фишки на свободное поле</span>  
+              </div>  
+              <span> Стрелки на клавиатуре так же могут сдвинуть фишки на свободное поле</span>  
             </div>
           </div>
-          <div className='modalFooter centerContent'>
-            <span className='closeNavigation' onClick={() => this.props.onClick()}>Понятно!</span>
+
+          <div className='modal-footer center-content'>
+            <span className='close-navigation' onClick={() => this.props.onClick()}>Понятно!</span>
           </div>  
         </div>
       </div>
@@ -200,7 +226,7 @@ class Game extends React.Component{
 
   handleClick(x, y){
     let squares = this.state.squares.slice();
-    let dashClick, tmp;
+    let tmp;
 
     if(squares[x][y]!==0){
       if(this.canMove(x, y, this.state.rowWithZero, this.state.columnWithZero)){
@@ -254,25 +280,25 @@ class Game extends React.Component{
 
         </div>
         <div className='main'>
-          <div className='leftSideBar'>
-            <div className='turnCounter'>
+          <div className='left-side-bar'>
+            <div className='turn-counter'>
               Количество ходов: {this.state.turn}
             </div>
           </div>
           <Board 
             squares={this.state.squares} handleClick={(x, y)=>{ this.handleClick(x,y) }}
           />
-          <div className='rightSideBar'>
-            <div className='button resetButton' onClick={() => this.resetGame()}>
-              <i className="material-icons refreshIcon">autorenew</i>
+          <div className='right-side-bar'>
+            <div className='button reset-button' onClick={() => this.resetGame()}>
+              <i className="material-icons refresh-icon">autorenew</i>
             </div>
           </div>
         </div>
         <div className='footer'>
-          <div className='turnCounter'>
+          <div className='turn-counter'>
             Количество ходов: {this.state.turn}
           </div>
-          <div className='button resetButton' onClick={() => this.resetGame()}>Новая игра</div>
+          <div className='button reset-button' onClick={() => this.resetGame()}>Новая игра</div>
         </div>
       </div>
     )
