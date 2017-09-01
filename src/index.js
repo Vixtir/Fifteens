@@ -70,6 +70,30 @@ class NavigationModal extends React.Component{
   }
 }
 
+class WinnerModal extends React.Component{
+  handleClick(event){
+    const elem = document.querySelector('div.modal');
+
+    if(event.target === elem){
+      this.props.onClick();
+    }
+  }
+
+  render(){
+    return(
+      <div className={`modal ${this.props.className}`} onClick={(event) => this.handleClick(event)}>
+        <div className='modal-win'>
+          <div className='modal-header text-center'>
+            Поздравляю ты победил
+          </div>
+          <div className='modal-footer center-content'>
+            <span className='close-winner' onClick={() => this.props.onClick()}>Супер!</span>
+          </div>  
+        </div>
+      </div>
+    )
+  }
+}
 
 class Square extends React.Component{
   render(){
@@ -128,11 +152,16 @@ class Game extends React.Component{
       rowWithZero: this.findRowWithZero(startArray),
       columnWithZero: startArray[this.findRowWithZero(startArray)].indexOf(0),
       turn: 0,
-      openNavigationModal: false
+      openNavigationModal: false,
+      openWinnerModal:false,
       }                     
   }
 
   keyDownHandler(event){
+    if(this.state.openNavigationModal || this.state.openWinnerModal){
+      return;
+    }
+
     let squares = this.state.squares.slice();
     let rowZero = this.state.rowWithZero;
     let columnZero = this.state.columnWithZero;
@@ -168,13 +197,25 @@ class Game extends React.Component{
     } else {
       return false;
     }
-    
-    this.setState({
-      squares: this.moveSquares(squares, fromX, fromY, toX, toY),
-      rowWithZero: fromX,
-      columnWithZero: fromY,
-      turn: this.state.turn + 1
-    })
+
+    const new_squares = this.moveSquares(squares, fromX, fromY, toX, toY);
+    let isWinner = this.winPositionOfSquares(new_squares);
+    if(isWinner){
+      this.setState({
+        squares: new_squares,
+        rowWithZero: fromX,
+        columnWithZero: fromY,
+        turn: this.state.turn + 1,
+        openWinnerModal: true
+      })
+    } else {
+      this.setState({
+        squares: new_squares,
+        rowWithZero: fromX,
+        columnWithZero: fromY,
+        turn: this.state.turn + 1
+      })
+    }
   }
 
   componentDidMount(){
@@ -225,6 +266,10 @@ class Game extends React.Component{
   }
 
   handleClick(x, y){
+    if(this.state.openNavigationModal || this.state.openWinnerModal){
+      return;
+    }
+
     let squares = this.state.squares.slice();
     let tmp;
 
@@ -233,22 +278,37 @@ class Game extends React.Component{
         tmp = squares[x][y];
         squares[this.state.rowWithZero][this.state.columnWithZero] = tmp;
         squares[x][y] = 0
-
-        this.setState({
-          squares: squares,
-          rowWithZero: x,
-          columnWithZero: y,
-          turn: this.state.turn + 1
-        })
+        let isWinner = this.winPositionOfSquares(squares); 
+        if(isWinner){
+          this.setState({
+            squares: squares,
+            rowWithZero: x,
+            columnWithZero: y,
+            turn: this.state.turn + 1,
+            openWinnerModal: true,
+          })
+        } else {
+          this.setState({
+            squares: squares,
+            rowWithZero: x,
+            columnWithZero: y,
+            turn: this.state.turn + 1
+          })
+        }
       }
     }
+
+  
   }
 
   handleInfoClick(event){
-    console.dir(this);
     this.setState({
       openNavigationModal: !this.state.openNavigationModal,
     })
+  }
+
+  handleWinnerClick(event){
+    this.resetGame();
   }
 
   resetGame(){
@@ -261,18 +321,27 @@ class Game extends React.Component{
       squares: startArray,
       rowWithZero: this.findRowWithZero(startArray),
       columnWithZero: startArray[this.findRowWithZero(startArray)].indexOf(0),
-      turn: 0
+      turn: 0,
+      openNavigationModal: false,
+      openWinnerModal:false
       })  
   }
 
-  render(){
-    if(this.winPositionOfSquares(this.state.squares)){
-      alert('YOU WIN');
-    }  
+  getRnd(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
+  render(){
     return (
       <div className='game'>
-        <NavigationModal className={this.state.openNavigationModal ? 'opened':'closed'} onClick = {this.handleInfoClick.bind(this)}/>
+        <NavigationModal 
+          className={this.state.openNavigationModal ? 'opened':'closed'} 
+          onClick = {this.handleInfoClick.bind(this)}
+        />
+        <WinnerModal 
+          className={this.state.openWinnerModal ? 'opened':'closed'} 
+          onClick = {this.handleWinnerClick.bind(this)}
+        />
         <div className='header'>
           <div className='title'>
             "Игра в Пятнашки" <i className="material-icons info" onClick = {(event) => this.handleInfoClick()}>info_outline</i>

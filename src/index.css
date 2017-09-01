@@ -209,6 +209,22 @@
     cursor: pointer;
   }
 
+  .modal-win{
+    position: relative;
+    display: block;
+    width: 90%;
+    max-width: 400px;
+    margin: 15% auto;
+    border-radius: 50px;
+    border: 4px solid var(--main-border-color);
+    background: var(--main-bg-color);
+  }
+
+  .close-winner{
+    color: var(--second-bg-color);
+    cursor: pointer;
+  }
+
 @media only screen and (orientation: landscape) and (max-width: 767px){
   .footer{
     display: none;
@@ -371,5 +387,10 @@
 
   .modal-body .material-icons{
     font-size: 34px;
+  }
+
+  .modal-win{
+    width: 90%;
+    max-width: 500px;
   }
 }
