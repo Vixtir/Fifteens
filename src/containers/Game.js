@@ -212,7 +212,7 @@ class Game extends React.Component{
           </div>
 
         </div>
-        <div className='main'>
+        <div className='body'>
           <div className='left-side-bar'>
             <div className='turn-counter'>
               Количество ходов: {this.state.turn}
