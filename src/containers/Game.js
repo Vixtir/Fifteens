@@ -1,5 +1,4 @@
 import React from 'react';
-import '../index.css';
 
 import shuffleArray from '../utils/shuffleArray'
 import Board from '../components/Board'
@@ -208,7 +207,7 @@ class Game extends React.Component{
         />
         <div className='header'>
           <div className='title'>
-            "Игра в Пятнашки" <i className="material-icons info" onClick = {(event) => this.handleTipsClick()}>info_outline</i>
+            <span>"Игра в Пятнашки"</span> <i className="material-icons info" onClick = {(event) => this.handleTipsClick()}>info_outline</i>
           </div>
 
         </div>
