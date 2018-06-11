@@ -1,3 +1,3 @@
 ## Fifteens game
 
-http://fifteens.herokuapp.com/
+https://fifteens-vix.herokuapp.com/
