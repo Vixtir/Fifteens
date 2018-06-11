@@ -70,7 +70,7 @@ const ModalWinner = ({handleClick}) =>
             Поздравляю ты победил
           </h2>
           <div className='modal-footer center-content'>
-            <span className='close-winner' onClick={() => handleClick()}>Супер!</span>
+            <span className='close-winner' onClick={() => handleClick()}>Новая игра</span>
           </div>
         </div>
     )
